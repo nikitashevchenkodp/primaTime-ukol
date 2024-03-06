@@ -1,0 +1,26 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.form {
+  max-width: 400px;
+  padding: calc(var(--spacing) * 4);
+  border: 1px solid grey;
+  border-radius: 12px;
+}
+
+.fieldset {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  border: none;
+}
+
+.form-control {
+  margin-bottom: calc(var(--spacing) * 3);
+}
