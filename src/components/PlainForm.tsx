@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import { useGetUniversities } from 'src/hooks/useGetUniversities';
 import { usePreviousNonNullish } from 'src/hooks/usePreviousNonNullish';
-import { ComboBox, ComboboxValue } from './ui/ComboBox';
+import { FormValues } from 'src/types';
+import { ComboBox } from './ui/ComboBox';
 import { Input } from './ui/Input';
-
-type FormType = {
-  name: string;
-  university: ComboboxValue | null;
-};
 
 const PlainForm = () => {
   const [inputValue, setInputValue] = useState('');
-  const [form, setForm] = useState<FormType>({
+  const [form, setForm] = useState<FormValues>({
     name: '',
     university: null,
   });
@@ -36,10 +32,10 @@ const PlainForm = () => {
   return (
     <div className="form-container">
       <form className="form" onSubmit={submit}>
-        <h3 className="title">Plain form</h3>
+        <h3 className="title">Regular form</h3>
         <fieldset className="fieldset">
           <Input
-            label="Name"
+            label="Vaše křestni jmeéno"
             fullWidth
             value={form.name}
             onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
@@ -58,7 +54,7 @@ const PlainForm = () => {
             isLoading={isLoading}
             inputProps={{
               fullWidth: true,
-              label: 'University',
+              label: 'Univerzita na kterou chodite',
             }}
           />
         </fieldset>

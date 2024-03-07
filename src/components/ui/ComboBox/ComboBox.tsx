@@ -1,4 +1,4 @@
-import { useEffect, useState, Ref, useMemo, useCallback } from 'react';
+import { useState, Ref, useMemo, useCallback } from 'react';
 import { forwardRef } from 'react';
 import { useLatest } from 'src/hooks/useLatest';
 import { Input, InputProps } from '../Input';
@@ -10,11 +10,13 @@ import { Dropdown } from './Dropdown';
 /*
  There is a lot of ways to optimize this component.
  The main idea make it work and simple.
- For example we can make a render function for options, and pass option component inside
- We can reuse Dropdown for a lot of different components, such as Menu etc.
- Separate autocomplete logic in useAutocomplete hook and leave in this component only component structure.
- Also we can make deeper decomposition, and event listeners to keydown, to handlen avigation by options etc.
- We are able to handle different option types, either strin[] or Record<string,any>
+ We can also:
+  1) Make a render prop function for options, and pass option component from inside
+  2) Reuse Dropdown for a lot of different components, such as Menu etc.
+  3) Separate autocomplete logic in useAutocomplete hook and leave in this component only component structure.
+  4) Make deeper decomposition, and event listeners to keydown, to handle navigation by options etc.
+  5) Handle different option types, either string[] or Record<string,any>
+  8) Managing default value
 */
 
 export type ComboboxValue = {
@@ -40,11 +42,6 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
   const [anchorElement, setAnchorElement] = useState<HTMLInputElement | null>(null);
 
   const latestState = useLatest({ inputValue, inptValue, value });
-
-  // useEffect(() => {
-  //   const activeOpt = options?.find((opt) => opt.value === value?.value);
-  //   setInptValue(activeOpt?.label || '');
-  // }, [value]);
 
   const handleClose = useCallback(() => {
     setAnchorElement(null);

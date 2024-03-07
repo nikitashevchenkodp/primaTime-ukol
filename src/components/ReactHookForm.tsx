@@ -2,13 +2,9 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useGetUniversities } from 'src/hooks/useGetUniversities';
 import { usePreviousNonNullish } from 'src/hooks/usePreviousNonNullish';
-import { ComboBox, ComboboxValue } from './ui/ComboBox';
+import { FormValues } from 'src/types';
+import { ComboBox } from './ui/ComboBox';
 import { Input } from './ui/Input';
-
-type FormValues = {
-  name: string;
-  university: ComboboxValue | null;
-};
 
 const ReactHookForm = () => {
   const {

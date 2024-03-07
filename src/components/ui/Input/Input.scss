@@ -36,7 +36,7 @@
     padding-right: calc(var(--spacing) * 9);
     outline: none;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: calc(var(--brs) * 0.75);
 
     font-size: 1rem;
     text-overflow: ellipsis;
