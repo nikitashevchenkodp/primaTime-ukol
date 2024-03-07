@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useDebouncedValue } from 'src/hooks/useDebounceValue';
 import { useGetUniversities } from 'src/hooks/useGetUniversities';
 import { usePreviousNonNullish } from 'src/hooks/usePreviousNonNullish';
 import { ComboBox, ComboboxValue } from './ui/ComboBox';
@@ -18,10 +17,7 @@ const PlainForm = () => {
 
   const [inputValue, setInputValue] = useState('');
 
-  const debouncedInputValue = useDebouncedValue(inputValue, 500);
-
-  const { data, isLoading } = useGetUniversities(debouncedInputValue);
-
+  const { data, isLoading } = useGetUniversities(inputValue);
   const prevOptions = usePreviousNonNullish(data);
 
   const submit = (e: React.FormEvent) => {
@@ -32,8 +28,9 @@ const PlainForm = () => {
 
   return (
     <div className="form-container">
-      <h3 className="title">Plain form</h3>
       <form className="form" onSubmit={submit}>
+        <h3 className="title">Plain form</h3>
+
         <fieldset className="fieldset">
           <Input
             label="Name"

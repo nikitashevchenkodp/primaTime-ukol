@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useDebouncedValue } from 'src/hooks/useDebounceValue';
 import { useGetUniversities } from 'src/hooks/useGetUniversities';
 import { usePreviousNonNullish } from 'src/hooks/usePreviousNonNullish';
 import { ComboBox, ComboboxValue } from './ui/ComboBox';
@@ -25,9 +24,7 @@ const ReactHookForm = () => {
   });
   const [inputValue, setInputValue] = useState('');
 
-  const debouncedInputValue = useDebouncedValue(inputValue, 500);
-
-  const { data, isLoading } = useGetUniversities(debouncedInputValue);
+  const { data, isLoading } = useGetUniversities(inputValue);
 
   const prevOptions = usePreviousNonNullish(data);
 
@@ -38,8 +35,8 @@ const ReactHookForm = () => {
 
   return (
     <div className="form-container">
-      <h3 className="title">With React Hook Form</h3>{' '}
       <form className="form" onSubmit={submit}>
+        <h3 className="title">With React Hook Form</h3>
         <fieldset className="fieldset">
           <Input
             label="Vaše křestni jmeéno"

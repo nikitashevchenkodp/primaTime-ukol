@@ -113,6 +113,7 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
         onClick={handleClick}
         onBlur={handleBlur}
         endElement={inputEndElement}
+        autoComplete="off"
       />
       <Dropdown anchorElement={anchorElement} isOpen={Boolean(anchorElement)}>
         <div className="Combobox-Container">

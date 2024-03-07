@@ -5,7 +5,7 @@
   gap: calc(var(--spacing) * 4);
   padding: calc(var(--spacing) * 10);
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 746px) {
     & {
       flex-direction: row;
       justify-content: center;
@@ -16,7 +16,7 @@
 .form {
   width: 100%;
   padding: calc(var(--spacing) * 4);
-  border: 1px solid grey;
+  border: 1px solid var(--border);
   border-radius: 12px;
 }
 

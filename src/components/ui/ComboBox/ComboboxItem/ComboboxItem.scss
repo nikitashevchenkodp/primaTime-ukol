@@ -5,6 +5,9 @@
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
+  &:not(:last-of-type) {
+    border-bottom: 1px solid var(--border);
+  }
   &:hover {
     background-color: var(--primary-lighter);
   }
