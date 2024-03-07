@@ -41,10 +41,10 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
 
   const latestState = useLatest({ inputValue, inptValue, value });
 
-  useEffect(() => {
-    const activeOpt = options?.find((opt) => opt.value === value?.value);
-    setInptValue(activeOpt?.label || '');
-  }, [value]);
+  // useEffect(() => {
+  //   const activeOpt = options?.find((opt) => opt.value === value?.value);
+  //   setInptValue(activeOpt?.label || '');
+  // }, [value]);
 
   const handleClose = useCallback(() => {
     setAnchorElement(null);

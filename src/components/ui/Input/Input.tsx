@@ -1,4 +1,4 @@
-import { forwardRef, memo } from 'react';
+import { forwardRef } from 'react';
 import classNames from 'classnames';
 
 import './Input.scss';
@@ -31,4 +31,4 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   );
 });
 
-export default memo(Input);
+export default Input;

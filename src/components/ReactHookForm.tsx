@@ -43,13 +43,12 @@ const ReactHookForm = () => {
             error={!!errors.name}
             helperText={errors.name?.message}
             fullWidth
-            {...register('name', { required: 'This field is required' })}
+            {...register('name', { required: 'Toto pole je povinné' })}
           />
           <Controller
             name="university"
             control={control}
-            rules={{ required: 'This field is required' }}
-            render={({ field: { ref, onChange, value, name }, fieldState: { error } }) => {
+            render={({ field: { ref, onChange, value, name } }) => {
               return (
                 <ComboBox
                   value={value}
@@ -64,8 +63,6 @@ const ReactHookForm = () => {
                   inputRef={ref}
                   isLoading={isLoading}
                   inputProps={{
-                    error: !!error?.message,
-                    helperText: error?.message,
                     fullWidth: true,
                     label: 'Univerzita na kterou chodite',
                     name,

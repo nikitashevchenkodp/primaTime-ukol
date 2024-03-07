@@ -1,10 +1,11 @@
 .Combobox-Item {
   padding: calc(var(--spacing) * 2);
+  overflow: hidden;
 
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
   cursor: pointer;
+
   &:not(:last-of-type) {
     border-bottom: 1px solid var(--border);
   }
