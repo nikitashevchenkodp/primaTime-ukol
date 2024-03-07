@@ -1,4 +1,4 @@
-import { useEffect, useState, Ref } from 'react';
+import { useEffect, useState, Ref, useMemo } from 'react';
 import { forwardRef } from 'react';
 import { Input, InputProps } from '../Input';
 import './ComboBox.scss';
@@ -14,16 +14,13 @@ type ComboBoxProps = JSX.IntrinsicElements['div'] & {
   value: ComboboxValue | null;
   handleChange: (newValue: ComboboxValue | null) => void;
   inputValue?: string;
-  onInputChange?: (
-    e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLLIElement>,
-    inputValue: string
-  ) => void;
+  onInputChange?: (e: React.SyntheticEvent, inputValue: string) => void;
   inputProps?: InputProps;
   inputRef?: Ref<HTMLInputElement>;
 };
 
 const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
-  const { options, handleChange, value, onInputChange, inputValue, inputProps, inputRef } = props;
+  const { options, handleChange, value, onInputChange, inputValue, inputProps, inputRef, ...rest } = props;
 
   useEffect(() => {
     const activeOpt = options.find((opt) => opt.value === value?.value);
@@ -42,7 +39,6 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    console.log(value);
     setInptValue(value?.label || '');
     onInputChange?.(e, value?.label || '');
     setAnchorElement(null);
@@ -74,8 +70,14 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
     }
   };
 
+  const resetValue = (e: React.SyntheticEvent) => {
+    handleChange(null);
+    setInptValue('');
+    onInputChange?.(e, '');
+  };
+
   return (
-    <div ref={ref}>
+    <div ref={ref} className="Combobox-Root" {...rest}>
       <Input
         {...inputProps}
         ref={inputRef}
@@ -83,15 +85,22 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
         value={inptValue}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        endElement={
+          value && (
+            <button className="Combobox-Reset" onClick={resetValue}>
+              &#10005;
+            </button>
+          )
+        }
       />
       <Dropdown anchorElement={anchorElement} onClose={handleClose} isOpen={Boolean(anchorElement)}>
-        <div className="Dropdown-Container">
-          <ul className="Dropdown-List" onMouseDown={clickHandler}>
+        <div className="Options-Container">
+          <ul className="Options-List" onMouseDown={clickHandler}>
             {options.length ? (
               options.map((opt) => {
                 return (
                   <li
-                    className={`${value?.value === opt.value ? 'Dropdown-ItemActive' : ''} Dropdown-Item`}
+                    className={`${value?.value === opt.value ? 'Options-ItemActive' : ''} Options-Item`}
                     key={opt.value}
                     onClick={(e) => {
                       handleChooseOption(e, opt);
@@ -102,7 +111,7 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
                 );
               })
             ) : (
-              <p>No options</p>
+              <div className="Options-NoOptions">No options</div>
             )}
           </ul>
         </div>

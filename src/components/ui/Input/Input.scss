@@ -39,6 +39,8 @@
     border-radius: 8px;
 
     font-size: 1rem;
+    text-overflow: ellipsis;
+    padding-right: 36px;
 
     &:focus,
     &:active {
@@ -49,7 +51,7 @@
       pointer-events: none;
     }
 
-    .Input-withError > & {
+    .Input-withError & {
       border-color: var(--error);
       &:focus,
       &:active {
@@ -57,6 +59,17 @@
         border-color: var(--error);
       }
     }
+  }
+
+  &-fieldContainer {
+    width: 100%;
+    position: relative;
+  }
+  &-fieldEndItem {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translate3d(0, -50%, 0);
   }
 
   &-HelperText {

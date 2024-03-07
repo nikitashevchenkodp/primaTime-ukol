@@ -8,10 +8,11 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   error?: boolean;
   helperText?: string;
   fullWidth?: boolean;
+  endElement?: React.ReactNode;
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const { label, helperText, error, disabled, className = '', fullWidth = false, ...rest } = props;
+  const { label, helperText, error, disabled, endElement, className = '', fullWidth = false, ...rest } = props;
 
   const rootClasses = classNames('Input-root', className, {
     'Input-fullWidth': fullWidth,
@@ -21,7 +22,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <div className={rootClasses}>
       {label && <label className="Input-label">{label}</label>}
-      <input className="Input-field" ref={ref} {...rest} disabled={disabled} />
+      <div className="Input-fieldContainer">
+        <input className="Input-field" ref={ref} {...rest} disabled={disabled} />
+        {endElement && <div className="Input-fieldEndItem">{endElement}</div>}
+      </div>
       {helperText && <p className="Input-HelperText">{helperText}</p>}
     </div>
   );

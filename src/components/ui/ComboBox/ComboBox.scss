@@ -1,4 +1,18 @@
-.Dropdown-Container {
+.Combobox-Reset {
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--list-item-hover);
+  }
+}
+
+.Options-Container {
   width: 100%;
   border: 1px solid grey;
   border-radius: 12px;
@@ -6,17 +20,25 @@
   overflow: auto;
   max-height: 200px;
 }
-.Dropdown-List {
+.Options-List {
   background-color: var(--bg);
   list-style: none;
 }
-.Dropdown-Item {
-  padding: var(--spacing);
+.Options-Item {
+  padding: calc(var(--spacing) * 2);
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   cursor: pointer;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--list-item-hover);
   }
 }
-.Dropdown-ItemActive {
+.Options-ItemActive {
   font-weight: 700;
+  background-color: var(--list-item-hover);
+}
+.Options-NoOptions {
+  padding: calc(var(--spacing) * 2);
 }
