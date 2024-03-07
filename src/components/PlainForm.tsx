@@ -24,10 +24,16 @@ const PlainForm = () => {
 
   const prevOptions = usePreviousNonNullish(data);
 
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const { name, university } = form;
+    alert(` Jméno: ${name}, Univerzita: ${university ? university.label : 'nevyplněno'}`);
+  };
+
   return (
     <div className="form-container">
       <h3 className="title">Plain form</h3>
-      <form className="form">
+      <form className="form" onSubmit={submit}>
         <fieldset className="fieldset">
           <Input
             label="Name"

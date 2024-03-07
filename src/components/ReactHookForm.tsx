@@ -3,8 +3,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDebouncedValue } from 'src/hooks/useDebounceValue';
 import { useGetUniversities } from 'src/hooks/useGetUniversities';
 import { usePreviousNonNullish } from 'src/hooks/usePreviousNonNullish';
-import { ComboBox } from './ui/ComboBox';
+import { ComboBox, ComboboxValue } from './ui/ComboBox';
 import { Input } from './ui/Input';
+
+type FormValues = {
+  name: string;
+  university: ComboboxValue | null;
+};
 
 const ReactHookForm = () => {
   const {
@@ -12,7 +17,7 @@ const ReactHookForm = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormValues>({
     defaultValues: {
       name: '',
       university: null,
@@ -26,13 +31,18 @@ const ReactHookForm = () => {
 
   const prevOptions = usePreviousNonNullish(data);
 
+  const submit = handleSubmit((values) => {
+    const { name, university } = values;
+    alert(` Jméno: ${name}, Univerzita: ${university ? university.label : 'nevyplněno'}`);
+  });
+
   return (
     <div className="form-container">
       <h3 className="title">With React Hook Form</h3>{' '}
-      <form className="form" onSubmit={handleSubmit((res) => console.log(res))}>
+      <form className="form" onSubmit={submit}>
         <fieldset className="fieldset">
           <Input
-            label="Name"
+            label="Vaše křestni jmeéno"
             error={!!errors.name}
             helperText={errors.name?.message}
             fullWidth
@@ -60,7 +70,7 @@ const ReactHookForm = () => {
                     error: !!error?.message,
                     helperText: error?.message,
                     fullWidth: true,
-                    label: 'University',
+                    label: 'Univerzita na kterou chodite',
                     name,
                   }}
                 />

@@ -50,8 +50,8 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
     setAnchorElement(null);
   }, []);
 
-  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-    setAnchorElement(e.target);
+  const handleClick = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
+    setAnchorElement(e.target as HTMLInputElement);
   }, []);
 
   const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
@@ -77,15 +77,8 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
     const newValue = event.target.value;
 
     setAnchorElement(event.target);
-
-    if (inputValue !== newValue) {
-      setInptValue(newValue);
-      onInputChange?.(event, newValue);
-    }
-
-    if (newValue === '') {
-      handleChange(null);
-    }
+    setInptValue(newValue);
+    onInputChange?.(event, newValue);
   }, []);
 
   const resetValue = useCallback((e: React.SyntheticEvent) => {
@@ -117,7 +110,7 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
         ref={inputRef}
         onChange={handleInputChange}
         value={inptValue}
-        onFocus={handleFocus}
+        onClick={handleClick}
         onBlur={handleBlur}
         endElement={inputEndElement}
       />
