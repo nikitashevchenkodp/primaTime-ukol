@@ -1,9 +1,9 @@
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 import classNames from 'classnames';
 
 import './Input.scss';
 
-export type InputProps = JSX.IntrinsicElements['input'] & {
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   error?: boolean;
   helperText?: string;
@@ -12,6 +12,7 @@ export type InputProps = JSX.IntrinsicElements['input'] & {
 
 const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const { label, helperText, error, disabled, className = '', fullWidth = false, ...rest } = props;
+
   const rootClasses = classNames('Input-root', className, {
     'Input-fullWidth': fullWidth,
     'Input-withError': error,
@@ -26,4 +27,4 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   );
 });
 
-export default Input;
+export default memo(Input);
