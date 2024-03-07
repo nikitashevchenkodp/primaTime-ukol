@@ -7,11 +7,10 @@ const DEFAULT_MARGIN_TOP = 12;
 type Props = PropsWithChildren & {
   anchorElement: HTMLElement | null;
   isOpen?: boolean;
-  onClose?: () => void;
 };
 
 const Dropdown = (props: Props) => {
-  const { children, anchorElement, onClose, isOpen } = props;
+  const { children, anchorElement, isOpen } = props;
   const contentRef = useRef<HTMLDivElement | null>(null);
   useLayoutEffect(() => {
     if (anchorElement && contentRef.current) {

@@ -1,6 +1,8 @@
 @use 'sass:color';
 
 $primary: #a855f7;
+$error: #b91c1c;
+$bg: #fff;
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -9,8 +11,8 @@ $primary: #a855f7;
 
   /*Colors*/
   --primary: #{$primary};
-  --error: #b91c1c;
-  --bg: white;
+  --error: #{$error};
+  --bg: #{$bg};
 
   --primary-lighter: #{color.mix($primary, white, 10%)};
   --primary-darker: #{color.mix($primary, black, 90%)};

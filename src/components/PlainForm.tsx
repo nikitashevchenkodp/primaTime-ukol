@@ -1,32 +1,50 @@
 import { useState } from 'react';
-import { ComboBox } from './ui/ComboBox';
+import { useDebouncedValue } from 'src/hooks/useDebounceValue';
+import { useGetUniversities } from 'src/hooks/useGetUniversities';
+import { usePreviousNonNullish } from 'src/hooks/usePreviousNonNullish';
+import { ComboBox, ComboboxValue } from './ui/ComboBox';
 import { Input } from './ui/Input';
 
-const opts = [
-  { value: 'Test 1 a', label: 'Test 1 a' },
-  { value: 'Test 2 ab', label: 'Test 2 ab' },
-  { value: 'Test 3 abc', label: 'Test 3 abc' },
-  { value: 'Test 4 abcd', label: 'Test 4 abcd' },
-  { value: 'Test 5 abcde', label: 'Test 5 abcde' },
-  { value: 'Test 6 abcdei', label: 'Test 6 abcdeiasdfsd hjsdfjh sjdfjh sjdhfj sdjhfjsdjfasdfas' },
-  { value: 'Test 7 abcdeif', label: 'Test 7 abcdeif' },
-];
+type FormType = {
+  name: string;
+  university: ComboboxValue | null;
+};
 
 const PlainForm = () => {
-  const [value, setValue] = useState<any>(null);
+  const [form, setForm] = useState<FormType>({
+    name: '',
+    university: null,
+  });
+
+  const [inputValue, setInputValue] = useState('');
+
+  const debouncedInputValue = useDebouncedValue(inputValue, 500);
+
+  const { data, isLoading } = useGetUniversities(debouncedInputValue);
+
+  const prevOptions = usePreviousNonNullish(data);
+
   return (
     <div className="form-container">
-      <h3>Plain form</h3>
+      <h3 className="title">Plain form</h3>
       <form className="form">
         <fieldset className="fieldset">
-          <Input label="Name" fullWidth />
+          <Input
+            label="Name"
+            fullWidth
+            value={form.name}
+            onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+          />
 
           <ComboBox
-            value={value}
+            value={form.university}
             handleChange={(newValue) => {
-              setValue(newValue);
+              setForm((prev) => ({ ...prev, university: newValue }));
             }}
-            options={opts}
+            inputValue={inputValue}
+            onInputChange={(_: unknown, val) => setInputValue(val)}
+            options={data || prevOptions}
+            isLoading={isLoading}
             inputProps={{
               fullWidth: true,
               label: 'University',

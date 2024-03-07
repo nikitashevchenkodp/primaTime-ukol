@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import './App.scss';
 import PlainForm from './components/PlainForm';
 import ReactHookForm from './components/ReactHookForm';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import './App.scss';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="container">
-      <PlainForm />
-      <ReactHookForm />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="container">
+        <PlainForm />
+        <ReactHookForm />
+      </div>
+    </QueryClientProvider>
   );
 }
 

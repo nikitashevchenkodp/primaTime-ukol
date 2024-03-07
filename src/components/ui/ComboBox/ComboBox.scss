@@ -8,11 +8,11 @@
   cursor: pointer;
 
   &:hover {
-    background-color: var(--list-item-hover);
+    background-color: var(--primary-lighter);
   }
 }
 
-.Options-Container {
+.Combobox-Container {
   width: 100%;
   border: 1px solid grey;
   border-radius: 12px;
@@ -20,25 +20,11 @@
   overflow: auto;
   max-height: 200px;
 }
-.Options-List {
+.Combobox-List {
   background-color: var(--bg);
   list-style: none;
 }
-.Options-Item {
-  padding: calc(var(--spacing) * 2);
 
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  cursor: pointer;
-  &:hover {
-    background-color: var(--list-item-hover);
-  }
-}
-.Options-ItemActive {
-  font-weight: 700;
-  background-color: var(--list-item-hover);
-}
-.Options-NoOptions {
+.Combobox-NoOptions {
   padding: calc(var(--spacing) * 2);
 }

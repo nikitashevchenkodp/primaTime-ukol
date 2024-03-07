@@ -1,0 +1,15 @@
+.Combobox-Item {
+  padding: calc(var(--spacing) * 2);
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--primary-lighter);
+  }
+}
+.Combobox-ItemActive {
+  font-weight: 700;
+  background-color: var(--primary-lighter);
+}

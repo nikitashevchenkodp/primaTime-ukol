@@ -1,8 +1,21 @@
-import { useEffect, useState, Ref, useMemo } from 'react';
+import { useEffect, useState, Ref, useMemo, useCallback } from 'react';
 import { forwardRef } from 'react';
+import { useLatest } from 'src/hooks/useLatest';
 import { Input, InputProps } from '../Input';
+import { Spinner } from '../Spinner';
 import './ComboBox.scss';
+import { ComboboxItem } from './ComboboxItem';
 import { Dropdown } from './Dropdown';
+
+/*
+ There is a lot of ways to optimize this component.
+ The main idea make it work and simple.
+ For example we can make a render function for options, and pass option component inside
+ We can reuse Dropdown for a lot of different components, such as Menu etc.
+ Separate autocomplete logic in useAutocomplete hook and leave in this component only component structure.
+ Also we can make deeper decomposition, and event listeners to keydown, to handlen avigation by options etc.
+ We are able to handle different option types, either strin[] or Record<string,any>
+*/
 
 export type ComboboxValue = {
   value: string | number;
@@ -10,52 +23,57 @@ export type ComboboxValue = {
 };
 
 type ComboBoxProps = JSX.IntrinsicElements['div'] & {
-  options: ComboboxValue[];
+  options?: ComboboxValue[];
   value: ComboboxValue | null;
   handleChange: (newValue: ComboboxValue | null) => void;
   inputValue?: string;
   onInputChange?: (e: React.SyntheticEvent, inputValue: string) => void;
   inputProps?: InputProps;
   inputRef?: Ref<HTMLInputElement>;
+  isLoading?: boolean;
 };
 
 const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
-  const { options, handleChange, value, onInputChange, inputValue, inputProps, inputRef, ...rest } = props;
-
-  useEffect(() => {
-    const activeOpt = options.find((opt) => opt.value === value?.value);
-    setInptValue(activeOpt?.label || '');
-  }, [value]);
+  const { options, handleChange, value, onInputChange, inputValue, inputProps, inputRef, isLoading, ...rest } = props;
 
   const [inptValue, setInptValue] = useState('');
   const [anchorElement, setAnchorElement] = useState<HTMLInputElement | null>(null);
 
-  const handleClose = () => {
+  const latestState = useLatest({ inputValue, inptValue, value });
+
+  useEffect(() => {
+    const activeOpt = options?.find((opt) => opt.value === value?.value);
+    setInptValue(activeOpt?.label || '');
+  }, [value]);
+
+  const handleClose = useCallback(() => {
     setAnchorElement(null);
-  };
+  }, []);
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     setAnchorElement(e.target);
-  };
+  }, []);
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    const { value } = latestState.current;
+
     setInptValue(value?.label || '');
     onInputChange?.(e, value?.label || '');
     setAnchorElement(null);
-  };
+  }, []);
 
-  const clickHandler = (e: React.MouseEvent<HTMLUListElement>) => {
+  const listClickHandler = useCallback((e: React.MouseEvent<HTMLUListElement>) => {
     e.preventDefault();
-  };
+  }, []);
 
-  const handleChooseOption = (e: React.MouseEvent<HTMLLIElement>, opt: ComboboxValue) => {
+  const handleChooseOption = useCallback((e: React.MouseEvent<HTMLLIElement>, opt: ComboboxValue) => {
     handleChange(opt);
     setInptValue(opt.label);
     onInputChange?.(e, opt.label);
     handleClose();
-  };
+  }, []);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
 
     setAnchorElement(event.target);
@@ -68,13 +86,29 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
     if (newValue === '') {
       handleChange(null);
     }
-  };
+  }, []);
 
-  const resetValue = (e: React.SyntheticEvent) => {
+  const resetValue = useCallback((e: React.SyntheticEvent) => {
     handleChange(null);
     setInptValue('');
     onInputChange?.(e, '');
-  };
+  }, []);
+
+  const inputEndElement = useMemo(() => {
+    if (!!anchorElement && isLoading) {
+      return <Spinner />;
+    }
+
+    if (value) {
+      return (
+        <button className="Combobox-Reset" onClick={resetValue}>
+          &#10005;
+        </button>
+      );
+    }
+
+    return;
+  }, [isLoading, value]);
 
   return (
     <div ref={ref} className="Combobox-Root" {...rest}>
@@ -85,33 +119,27 @@ const ComboBox = forwardRef<HTMLDivElement, ComboBoxProps>((props, ref) => {
         value={inptValue}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        endElement={
-          value && (
-            <button className="Combobox-Reset" onClick={resetValue}>
-              &#10005;
-            </button>
-          )
-        }
+        endElement={inputEndElement}
       />
-      <Dropdown anchorElement={anchorElement} onClose={handleClose} isOpen={Boolean(anchorElement)}>
-        <div className="Options-Container">
-          <ul className="Options-List" onMouseDown={clickHandler}>
-            {options.length ? (
+      <Dropdown anchorElement={anchorElement} isOpen={Boolean(anchorElement)}>
+        <div className="Combobox-Container">
+          <ul className="Combobox-List" onMouseDown={listClickHandler}>
+            {options?.length ? (
               options.map((opt) => {
                 return (
-                  <li
-                    className={`${value?.value === opt.value ? 'Options-ItemActive' : ''} Options-Item`}
+                  <ComboboxItem
                     key={opt.value}
+                    active={value?.value === opt.value}
                     onClick={(e) => {
                       handleChooseOption(e, opt);
                     }}
                   >
                     {opt.label}
-                  </li>
+                  </ComboboxItem>
                 );
               })
             ) : (
-              <div className="Options-NoOptions">No options</div>
+              <div className="Combobox-NoOptions">No options</div>
             )}
           </ul>
         </div>
